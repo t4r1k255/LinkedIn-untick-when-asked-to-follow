@@ -1,0 +1,91 @@
+
+(function() {
+    'use strict';
+    console.log("[DONTFOLLOW] Script started!");
+
+    let lastChecked = 0;
+    const DEBOUNCE_MS = 1000; // Don't check more than once per second
+
+    function uncheckFollowCompany() {
+        const now = Date.now();
+        if (now - lastChecked < DEBOUNCE_MS) {
+            return; // Skip if checked recently
+        }
+        lastChecked = now;
+
+        // Direct ID selector - most reliable
+        const checkbox = document.getElementById('follow-company-checkbox');
+        
+        if (checkbox && checkbox.checked) {
+            console.log("[DONTFOLLOW] Found checked follow-company-checkbox!");
+            console.log("[DONTFOLLOW] Checkbox details:", {
+                id: checkbox.id,
+                checked: checkbox.checked,
+                type: checkbox.type,
+                className: checkbox.className
+            });
+            
+            // Try to uncheck it
+            checkbox.checked = false;
+            console.log("[DONTFOLLOW] Set checked = false");
+            
+            // Also trigger click event (in case there are listeners)
+            checkbox.click();
+            console.log("[DONTFOLLOW] Clicked checkbox");
+            
+            // Dispatch change event
+            checkbox.dispatchEvent(new Event('change', { bubbles: true }));
+            console.log("[DONTFOLLOW] Dispatched change event");
+            
+            // Verify it's unchecked
+            setTimeout(() => {
+                if (!checkbox.checked) {
+                    console.log("[DONTFOLLOW] ✓ Successfully unchecked!");
+                } else {
+                    console.log("[DONTFOLLOW] ✗ Still checked after attempt");
+                    // Try label click as fallback
+                    const label = document.querySelector('label[for="follow-company-checkbox"]');
+                    if (label) {
+                        console.log("[DONTFOLLOW] Trying label click...");
+                        label.click();
+                    }
+                }
+            }, 100);
+        }
+    }
+
+    // Watch for modals appearing
+    const observer = new MutationObserver((mutations) => {
+        for (const mutation of mutations) {
+            for (const node of mutation.addedNodes) {
+                if (node.nodeType === 1) {
+                    // Check for various modal classes LinkedIn uses
+                    if (node.classList?.contains('artdeco-modal') ||
+                        node.classList?.contains('jobs-easy-apply-modal') ||
+                        node.querySelector('.artdeco-modal') ||
+                        node.querySelector('.jobs-easy-apply-modal')) {
+                        
+                        console.log("[DONTFOLLOW] Modal detected!");
+                        
+                        // Try multiple times with increasing delays
+                        // (modal content loads progressively)
+                        setTimeout(uncheckFollowCompany, 300);
+                        setTimeout(uncheckFollowCompany, 600);
+                        setTimeout(uncheckFollowCompany, 1000);
+                    }
+                }
+            }
+        }
+    });
+
+    // Start observing
+    observer.observe(document.body, { 
+        childList: true, 
+        subtree: true
+    });
+
+    // Initial check
+    setTimeout(uncheckFollowCompany, 1000);
+    
+    console.log("[DONTFOLLOW] Observer active, monitoring for modals...");
+})();
