@@ -1,4 +1,14 @@
-
+// ==UserScript==
+// @name         script to untick
+// @namespace    https://github.com/t4r1k255/LinkedIn-untick-when-asked-to-follow
+// @version      1.0
+// @description  Automatically unticks "Follow company" checkbox in LinkedIn Easy Apply
+// @author       t4r1k255
+// @match        https://www.linkedin.com/jobs/*
+// @icon         https://www.google.com/s2/favicons?sz=64&domain=linkedin.com
+// @grant        none
+// @license      MIT
+// ==/UserScript==
 (function() {
     'use strict';
     console.log("[DONTFOLLOW] Script started!");
