@@ -1,3 +1,5 @@
+NOT TO BE CONTINUED! Tüm linkedin script projelerimi https://github.com/t4r1k255/LinkedIn-Guvenli-Toolkit-Reklam-Filtreleri-Easy-Apply adresindeki repo'da topladım. hepsini tek yerden kullanıma sunuyorum.
+
 # DontFollow for LinkedIn
 
 Automatically unticks the "Follow company for more updates" checkbox in LinkedIn's Easy Apply job application modal.
